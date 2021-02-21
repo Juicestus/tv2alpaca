@@ -3,7 +3,6 @@
 import alpaca_trade_api as tradeAPI
 import pandas as pd
 
-
 class brokerage():
     
     def __init__(self, keyID, secretKey, baseURL = 'https://paper-api.alpaca.markets'):
