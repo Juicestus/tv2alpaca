@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Written by Justus Languell, jus@gtsbr.org, 2021
-# http://ce13945d70eb.ngrok.io/api/PKF29LL614BD93L6NNDU/itebP7fQt3J2OgIwdTHyJjs9hTxqG5cAUmDZJcQD/endpoint
+# http://7ed7c96568f8.ngrok.io/api/PK9QMDOWJQ9UYN1Z5AZE/03LOCn0orqWuRdtquUd2W51vNuF3xFm8yYIS4KsU/endpoint
 
 import alpaca
 from flask import Flask, render_template, request
@@ -18,13 +18,14 @@ def index():
 @app.route('/api/<key>/<scrt>/endpoint',methods=['POST'])
 def reroute(key,scrt):
     if request.method == 'POST':
+
         hook = request.json
         authorized = True
 
         if authorized: 
             print(f'Incoiming Hook - RAW: {hook}')
             broker = alpaca.brokerage(key,scrt)
-            if not broker.isMarketOpen():
+            if broker.isMarketOpen():
 
                 positions = broker.getPositions()
                 ticker = hook['ticker'].upper()
@@ -37,10 +38,12 @@ def reroute(key,scrt):
                     size = -abssize
                 else:
                     size = 0
+                    
                 try:
                     owned = int(positions[ticker])
                 except:
                     owned = 0
+
                 conf = (owned*size < 0) 
 
                 if owned > 0 and size < 0:
@@ -62,16 +65,15 @@ def reroute(key,scrt):
                 if owned < 0 and size < 0:
                     broker.execSELL(ticker.upper(),abs(size))
 
-                #try:
-                #    owned = int(positions[ticker])
-                #except:
-                #    owned = 0 
-                
-                #if broker.getPositions()[ticker] == owned + size:
-                print(broker.listOrders())
-                return f'Success!'
-                #else:
-                #return f'[WARNING] An error may have occured!'
+                try:
+                    nowOwned = int(positions[ticker])
+                except:
+                    nowOwned = 0 
+
+                if nowOwned == owned + size:
+                    return f'Success!'
+                else:
+                    return f'[WARNING] An error may have occured!'
             else:
                 return f'[WARNING] Market not open!'
         else:

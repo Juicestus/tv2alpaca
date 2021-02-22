@@ -6,12 +6,13 @@ from datetime import datetime
 from time import sleep
 import sys
 
-URL = 'http://localhost:5000/api/PK0PK2NE98R9PMBHN0IJ/7k2PG3wWOXbqA03M1OkEwH2MsQhIy0eLL43LKz1T/endpoint'
+
+URL = 'http://ce13945d70eb.ngrok.io/api/PKAJCGSZ9XP3B366WANF/eSkW0UnRRLxYCdyRP72XZtF2fqlQYTMaZ4M1PsYj/endpoint'
 
 timenow = datetime.now().strftime('%m-%d-%Y %H:%M:%S')
-ticker = 'AAPL'
-action = sys.argv[1]
-contracts = int(sys.argv[2])
+ticker = sys.argv[1]
+action = sys.argv[2]
+contracts = int(sys.argv[3])
 price = 200
 
 data = {"side":f"{action}","ticker":f"{ticker}","size":f"{contracts}","price":f"{price}","sent":f"{timenow}"}

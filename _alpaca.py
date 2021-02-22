@@ -16,11 +16,23 @@ class brokerage():
         barSet = self.api.get_barset(ticker,'1Min',1)
         return barSet[symbol]['close']
 
-    def execBUY(self, ticker, qty, _type='market', timeInForce='gtc'):
+    def oldBUY(self, ticker, qty, _type='market', timeInForce='gtc'):
         self.api.submit_order(symbol=ticker,qty=qty,side='buy',type=_type,time_in_force=timeInForce)
 
-    def execSELL(self, ticker, qty, _type='market', timeInForce='gtc'):
+    def SELL(self, ticker, qty, _type='market', timeInForce='gtc'):
         self.api.submit_order(symbol=ticker,qty=qty,side='sell',type=_type,time_in_force=timeInForce)
+
+    def BUY(self, ticker, qty, _type='market', timeInForce='gtc',stop=.2):
+        price = self.getPrice(ticker)
+        self.api.submit_order(
+            symbol=ticker,
+            qty=qty,
+            side='buy',
+            type='market',
+            time_in_force='gtc',
+            order_class='bracket',
+            stop_loss={'stop_price': (price * (1 - (stop / 100)))}
+        )
 
     def isAccountBlocked(self):
         return True if self.account.trading_blocked else False
