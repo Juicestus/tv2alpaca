@@ -24,7 +24,7 @@ def reroute(key,scrt):
         if authorized: 
             print(f'Incoiming Hook - RAW: {hook}')
             broker = alpaca.brokerage(key,scrt)
-            if not broker.isMarketOpen():
+            if broker.isMarketOpen():
 
                 positions = broker.getPositions()
                 ticker = hook['ticker'].upper()
