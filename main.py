@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
 # Written by Justus Languell, jus@gtsbr.org, 2021
-# http://ce13945d70eb.ngrok.io/api/PKF29LL614BD93L6NNDU/itebP7fQt3J2OgIwdTHyJjs9hTxqG5cAUmDZJcQD/endpoint
+# http://679a40ea7049.ngrok.io/api/PK87P8C3BAU1JDO4M3QR/XfgNN1ywesC70L4tz4HjAsfXCEdLD2em5dRkHPER/endpoint
 
 import alpaca
 from flask import Flask, render_template, request
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 import argparse
 from time import sleep
+import os
 
 app = Flask(__name__,template_folder='html')
 hookFormat = '{"side":"{{strategy.order.action}}","ticker":"{{ticker}}","size":"{{strategy.order.contracts}}","price":"{{strategy.order.price}}","sent":"{{timenow}}"}'
@@ -17,20 +21,24 @@ def index():
 
 @app.route('/api/<key>/<scrt>/endpoint',methods=['POST'])
 def reroute(key,scrt):
+    width = os.get_terminal_size().columns-6
+    print('-- ORDER '+('—'*(os.get_terminal_size().columns-9)))
+    print(f'|{key}|: [ACCEPTED]')
     if request.method == 'POST':
         hook = request.json
         authorized = True
 
         if authorized: 
-            print(f'Incoiming Hook - RAW: {hook}')
+            print(f'|{key}|: [AUTHORIZED]')
             broker = alpaca.brokerage(key,scrt)
             if broker.isMarketOpen():
-
                 positions = broker.getPositions()
                 ticker = hook['ticker'].upper()
                 side = hook['side'].upper()
                 abssize = int(hook['size'])
-        
+
+                print(f'|{key}|: Order: {side} {ticker} x {abssize}')
+
                 if side == 'BUY':
                     size = abssize
                 elif side == 'SELL':
@@ -43,40 +51,48 @@ def reroute(key,scrt):
                     owned = 0
                 conf = (owned*size < 0) 
 
+                print(f'|{key}|: ALREADY OWNED: {owned} shares')
+                print(f'|{key}|: REQUESTED SIZE: {size} shares')
+
+              
                 if owned > 0 and size < 0:
                     if abs(size) > owned:
                         broker.execSELL(ticker.upper(),owned)
-                        sleep(.05)
+                        sleep(1)
                         broker.execSELL(ticker.upper(),abs(size+owned))
                     elif abs(size) <= owned:
                         broker.execSELL(ticker.upper(),abs(size))
                 if owned < 0 and size > 0:
                     if size > abs(owned):
                         broker.execBUY(ticker.upper(),abs(owned))
-                        sleep(.05)
-                        broker.execBUY(ticker.upper(),size)
+                        sleep(1)
+                        broker.execBUY(ticker.upper(),size+owned)
                     if size < owned:
                         broker.execBUY(ticker.upper(),size)
-                if owned > 0 and size > 0:
+                if owned >= 0 and size > 0:
                     broker.execBUY(ticker.upper(),size)
-                if owned < 0 and size < 0:
+                if owned <= 0 and size < 0:
                     broker.execSELL(ticker.upper(),abs(size))
 
-                #try:
-                #    owned = int(positions[ticker])
-                #except:
-                #    owned = 0 
-                
-                #if broker.getPositions()[ticker] == owned + size:
-                print(broker.listOrders())
-                return f'Success!'
-                #else:
-                #return f'[WARNING] An error may have occured!'
+                try:
+                    nowOwned = int(positions[ticker])
+                except:
+                    nowOwned = 0 
+
+                if nowOwned == owned + size:
+                    print(f'|{key}|: [SUCCESS] Guaranteed Success!\n')
+                    return f'[SUCCESS] Success!'
+                else:
+                    print(f'|{key}|: [SUCCESS] Unclear Success!?\n')
+                    return f'[WARNING] An error may have occured!'
             else:
+                print(f'|{key}|: [WARNING] Market not open!\n')
                 return f'[WARNING] Market not open!'
         else:
+            print(f'|{key}|: [ERROR] UnAuthorized!\n')
             return '',401 
     else:
+        print(f'|{key}|: [ERROR] Method not Allowed!\n')
         return '',405 
 
 
