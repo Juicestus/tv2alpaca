@@ -1,0 +1,4 @@
+clint
+pandas
+flask
+alpaca_trade_api
