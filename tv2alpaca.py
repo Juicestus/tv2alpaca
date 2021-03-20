@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
 # Written by Justus Languell, jus@gtsbr.org, 2021
-# http://679a40ea7049.ngrok.io/api/PK87P8C3BAU1JDO4M3QR/XfgNN1ywesC70L4tz4HjAsfXCEdLD2em5dRkHPER/endpoint
 
 import alpaca
 from flask import Flask, render_template, request
 import logging
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
 import argparse
 from time import sleep
 import os
+
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__,template_folder='html')
 hookFormat = '{"side":"{{strategy.order.action}}","ticker":"{{ticker}}","size":"{{strategy.order.contracts}}","price":"{{strategy.order.price}}","sent":"{{timenow}}"}'
@@ -21,7 +22,6 @@ def index():
 
 @app.route('/api/<key>/<scrt>/endpoint',methods=['POST'])
 def reroute(key,scrt):
-    width = os.get_terminal_size().columns-6
     print('-- ORDER '+('—'*(os.get_terminal_size().columns-9)))
     print(f'|{key}|: [ACCEPTED]')
     if request.method == 'POST':

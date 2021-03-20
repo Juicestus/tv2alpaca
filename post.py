@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Written by Justus Languell, jus@gtsbr.org, 2021
+
 import requests
 import json
 from datetime import datetime
@@ -7,7 +9,8 @@ from time import sleep
 import sys
 
 
-URL = 'http://ce13945d70eb.ngrok.io/api/PKAJCGSZ9XP3B366WANF/eSkW0UnRRLxYCdyRP72XZtF2fqlQYTMaZ4M1PsYj/endpoint'
+URL = 'http://tv2alpaca.com/api/PKJXYKZJX9KXCFM4OMY9/WR3ovOzjnRL8z3vh11Ytszo2AMBTiOuL9J026Hpa/endpoint'
+
 
 timenow = datetime.now().strftime('%m-%d-%Y %H:%M:%S')
 ticker = sys.argv[1]

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Written by Justus Languell, jus@gtsbr.org, 2021
+
 import alpaca_trade_api as tradeAPI
 import pandas as pd
 
