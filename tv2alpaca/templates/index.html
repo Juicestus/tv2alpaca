@@ -3,8 +3,13 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"> 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" 
+		    rel="stylesheet" 
+			integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" 
+			crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" 
+		    integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" 
+			crossorigin="anonymous"></script>
         <meta name="description" content="TradingView to Alpaca bridge">
         <meta name="keywords" content="TradingView,Alpaca,bridge,stock">
         <meta name="author" content="Justus Languell">
@@ -12,12 +17,14 @@
         <link rel="icon" href="{{ url_for('static', filename='img/Logo0.png') }}">
     </head>
     <body>
-        <!-- Fixed navbar -->
         <header>
             <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-                <img src="{{ url_for('static', filename='img/Logo1.png') }}" class="rounded picon" alt="Icon" height="30" width="60">
+                <img src="{{ url_for('static', filename='img/Logo1.png') }}" 
+				    class="rounded picon" alt="Icon" height="30" width="60">
                 <a style="margin-left: 20px;" class="navbar-brand" href="#">tv2alpaca.com</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" 
+				    data-target="#navbarCollapse" aria-controls="navbarCollapse" 
+					aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -32,8 +39,6 @@
                 </div>
             </nav>
         </header>
-        
-        <!-- Begin page content -->
         <div style="padding-top: 80px; background-color: black;">
         <main role="main" class="container">
             <div class="row">
@@ -41,29 +46,31 @@
                 <h1 class="mt-4">TradingView 2 Alpaca</h1>
                 <br>
                     <p class="">
-                        TradingView 2 Alpaca (tv2alpaca) is a Webhooks bridge to convert <a href="https://www.tradingview.com/">TradingView</a> Webhooks to <a href="https://alpaca.markets/">Alpaca Trade API</a> orders. <br>
+                        TradingView 2 Alpaca (tv2alpaca) is a Webhooks bridge to convert 
+						    <a href="https://www.tradingview.com/">TradingView</a> Webhooks 
+							to <a href="https://alpaca.markets/">Alpaca Trade API</a> orders. <br>
                         See the code on <a href="https://github.com/Juicestus/tv2alpaca/">GitHub</a>.
                     </p>
                 <h2 class="mt-4">How to Use</h2>
                 <br>
                     <p class="">
-                        • Step 1: Get your Alpaca API Key ID and Secret Key of your paper or live trading account from the Alpaca Dashboard.<br><br>
+                        • Step 1: Get your Alpaca API Key ID and Secret Key of your paper or
+						    live trading account from the Alpaca Dashboard.<br><br>
                         • Step 2: Setup the TradingView Webhook Alerts in your TradingView chart. <br><br>
                         • Step 3: In the URL box, enter:<br>
-                        <code style='color:#F9F6EF;'>https://www.tv2alpaca.com/api/{your key id here}/{your secret key here}/endpoint</code><br><br>
+                        <code style='color:#F9F6EF;'>https://www.tv2alpaca.com/api/{your key id here}/{
+						    your secret key here}/endpoint</code><br><br>
                         • Step 4: In the data box, enter:<br>
                         <code style='color:#F9F6EF;'>{{fmrt}}</code>
                     </p><br>
-                <h4>If you found this helpful...</h4>
-                <p class="">Consider donating Ethereum at <code style='color:#F9F6EF;'>0xB1eDA5F757CF381d66dBd4ab867e69d217415759</code></p>
                 </div>
 				<div class="col">
-				    <img src="{{ url_for('static', filename='img/Logo0.png') }}" class="main rounded" alt="logo" height="256" width="256">
+				    <img src="{{ url_for('static', filename='img/Logo0.png') }}" 
+					    class="main rounded" alt="logo" height="256" width="256">
 				</div>
             </div>
         </div>
         </main>
-        <!-- Sticky Footer -->
         <footer class="footer">
             <div class="container">
                 <div class="row">
@@ -76,7 +83,6 @@
                         </span>
                     </div>
                     <div class="col-4">
-                        <!-- Bootstrap Credit, bc i'm nice -->
                         <span class="text-muted">
                             <a href="https://getbootstrap.com/" class="footer-link">Bootstrapped</a>
                         </span>
