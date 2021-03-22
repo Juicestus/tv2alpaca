@@ -32,9 +32,6 @@ def lprint(text,key):
     
     dels = ['[',']',key,'|','\n',':','—',' ORDER ']
 
-    #for d in dels:
-    #    text = text.replace(d,'')
-
     f.write(time+('&nbsp;'*8)+text+'\n')
     f.close()
 
