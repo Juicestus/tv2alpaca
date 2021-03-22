@@ -7,9 +7,9 @@ Instructions on the [website]()
 ## Recent Changes
 * Client logging
 * Bugfixes
+* Server stdout display
 
 ## TODO
-* Server stdout display
 * Pass keys in data
 * Security
 * Fix more bugs

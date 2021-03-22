@@ -22,33 +22,55 @@ hookFormat = '{"side":"{{strategy.order.action}}","ticker":"{{ticker}}","size":"
 
 logs = {}
 
-def log(key,data):
+def lprint(text,key):
     
     time = datetime.now().strftime('%m/%d/%Y @ %H:%M:%S')
 
+    print(text)
+
+    f = open('logfile','a')
+    
+    dels = ['[',']',key,'|','\n',':','—',' ORDER ']
+
+    #for d in dels:
+    #    text = text.replace(d,'')
+
+    f.write(time+('&nbsp;'*8)+text+'\n')
+    f.close()
+
+    for d in dels:
+        text = text.replace(d,'')
+
     if key not in logs.keys():
-        logs[key] = [(time,data)]
+        logs[key] = [(time,text)]
 
     else:
-        logs[key].append((time,data))
-
-
-def lprint(text,key):
-    
-    print(text)
-    
-    dels = ['[',']',key,'|','\n',':']
-
-    for f in dels:
-        text = text.replace(f,'')
-
-    log(key,f'{text}')
+        logs[key].append((time,text))
 
 
 @app.route('/')
 def index():
 
     return render_template('index.html',fmrt=hookFormat)
+
+
+@app.route('/log')
+def systemlog():
+
+    content = ''.join([l+'<br>' for l in open('logfile','r')])
+
+    return f'''
+<h1>System Terminal STDOUT</h1>
+<div style="
+border:8px solid #ccc;
+background-color:black;
+padding:15px;">
+<code style="
+font-size:140%;
+color:white;">{
+content}
+</code>
+</div>'''
 
 
 @app.route('/api/<key>/<scrt>/log',methods=['GET'])
@@ -63,7 +85,7 @@ def displaylog(key,scrt):
 @app.route('/api/<key>/<scrt>/endpoint',methods=['POST'])
 def route(key,scrt):
 
-    print('-- ORDER '+('—'*(os.get_terminal_size().columns-9)))
+    lprint('—— ORDER '+('—'*(os.get_terminal_size().columns-9)),key)
     lprint(f'|{key}|: [ACCEPTED]',key)
 
     if request.method == 'POST':
