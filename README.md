@@ -2,13 +2,13 @@
  TradingView WebHook Bridge to Alpaca
 
 ## How to use
-Check the site
+Instructions on the [website]()
 
-### Recent Changes
+## Recent Changes
 * Client logging
 * Bugfixes
 
-### TODO
+## TODO
 * Server stdout display
 * Pass keys in data
 * Security
