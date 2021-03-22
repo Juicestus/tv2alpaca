@@ -2,7 +2,7 @@
  TradingView WebHook Bridge to Alpaca
 
 ## How to use
-Instructions on the [website]()
+Instructions on the [website]('http://tv2alpaca.com/')
 
 ## Recent Changes
 * Client logging
