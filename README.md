@@ -10,6 +10,8 @@ Instructions on the [website]('http://tv2alpaca.com/')
 * Server stdout display
 
 ## TODO
+* Make the ind. logging system not shit
+8 Add security to logging?
 * Pass keys in data
-* Security
+* Make the security not shit
 * Fix more bugs
