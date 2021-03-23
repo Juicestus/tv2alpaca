@@ -11,7 +11,7 @@ Instructions on the [website]('http://tv2alpaca.com/')
 
 ## TODO
 * Make the ind. logging system not shit
-8 Add security to logging?
+* Add security to logging?
 * Pass keys in data
 * Make the security not shit
 * Fix more bugs
