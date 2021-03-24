@@ -3,6 +3,12 @@
  * A C++ version of my shitty test client for tv2alpaca (poster.py)
  * Just to practice C++ ig.
  * poster.py is still there for use.
+ * Compile: g++ -std=c++11 -o poster poster.cpp -lcurl
+ *      Use C++ >= 11 ^  ./poster ^    src ^      ^ libcurl
+ * Have libcurl static library installed!
+ * Mac:     $ brew install curl
+ * Linux:   $ apt-get install curl
+ * Windows: I don't fucking know lmfao
  */
 
 #include <iostream>
@@ -14,14 +20,15 @@
 
 std::string PATH = "t2akeys";
 std::string URL = "www.tv2alpaca.com";
+std::string OPS[6] = {"--url","-u","--help","-h","--post","-p"};
 
-std::string stringdt(std::time_t now)
+
+std::string stringfdto(std::time_t now, std::string format = "%m-%d-%Y %H:%M:%S")
 {
-    struct tm  ts;
-    char       buf[80];
-
+    struct tm ts;
+    char buf[80];
     ts = *localtime(& now);
-    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+    strftime(buf, sizeof(buf), format.c_str(), &ts);
     printf("%s\n", buf);
     return std::string(buf);
 }
@@ -30,7 +37,7 @@ std::string datetime()
 {
     auto rawTime = std::chrono::system_clock::now();
     std::time_t timeObj = std::chrono::system_clock::to_time_t(rawTime);
-    std::string formatted = stringdt(timeObj);
+    std::string formatted = stringfdto(timeObj);
     return formatted;
 }
 
@@ -129,7 +136,7 @@ void request(std::string url, std::string body)
         std::cout << readBuffer << std::endl;
     }
 
-    std::cout << "Posting to : " << url << "\n";
+    std::cout << "Posting: \n" << body << "\nTo:\n" << url << "\n";
 } 
 
 void post(std::string key, 
@@ -139,6 +146,8 @@ void post(std::string key,
           std::string ticker,
           std::string contracts)
 {
+    std::string sTime = datetime();
+
     std::string furl = "http://" 
                         + url 
                         + "/api/" 
@@ -157,11 +166,10 @@ void post(std::string key,
                         + "\",\"price\":\""
                         + "null"
                         + "\",\"sent\":\""
-                        + datetime()
+                        + sTime
                         + "\"}";
 
     request(furl, body);
-
 }
 
 void setKeys(std::string key, std::string secret, std::string path)
@@ -173,7 +181,11 @@ void setKeys(std::string key, std::string secret, std::string path)
     write(key,secret,path);
 }
 
-std::string opArg(std::string param, std::string abrv, char *argv[], int argc, std::string defval)
+std::string opArg(std::string param,
+                  std::string abrv, 
+                  char *argv[], 
+                  int argc, 
+                  std::string defval)
 {
     std::string val = defval;
 
@@ -197,7 +209,6 @@ std::string opArg(std::string param, std::string abrv, char *argv[], int argc, s
 
 int main(int argc, char **argv) 
 {
-    std::cout << datetime() << "\n";
     if (argc > 1) 
     {
         if (stringInArgs("-h",argv,argc) 
@@ -235,10 +246,38 @@ int main(int argc, char **argv)
 
             std::string *keys;
             keys = read(path);
-            post(keys[0], keys[1], url, argv[2], argv[3], argv[4]);
+
+            bool opInRes = false;
+
+            for (int i = 0; i < 6; i++)
+            {
+                std::string op = OPS[i];
+                
+                for (int j = 0; j < 5; j++)
+                {
+                    if (argIs(op,argv,j))
+                    {
+                        opInRes = true;
+                    }
+                }
+            }
+
+            if (!opInRes)
+            {
+                post(keys[0], 
+                 keys[1], 
+                 url, 
+                 argv[2], 
+                 argv[3], 
+                 argv[4]);
+            }
+            else
+            {
+                std::cout << "Warning: Optional args must go after required args!\n";
+            }
+            
         }
     }
     
 }
 
-// Why no coments? Bc im stupid and lazy and you can eat my ass!
