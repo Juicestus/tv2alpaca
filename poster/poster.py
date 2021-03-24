@@ -3,6 +3,7 @@
 # A less shitty version of the
 # tv2alpaca test client
 # Written by Justus Languell jus@gtsbr.org, 2021
+# See poster.cpp for my C++ version I wrote for practice
 
 import requests
 import sys
