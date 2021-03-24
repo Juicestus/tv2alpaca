@@ -13,14 +13,9 @@
 std::string PATH = "t2akeys";
 std::string URL = "www.tv2alpaca.com";
 
-void pass()
-{
-    int var;
-}
-
 bool argIs(std::string val, char *argv[], int index)
 {
-    if (std::strcmp(argv[1],val.c_str()) == 0)
+    if (std::strcmp(argv[index],val.c_str()) == 0)
     {
         return true;
     }
@@ -76,12 +71,26 @@ std::string * read(std::string path)
 
 void help()
 {
-    std::cout << "Help Message\n";
+    std::string msg = "tv2alpaca poster - by Justus Languell\n"
+                       "\n * IN DEVELOPMENT, NOT COMPLETE *\n\n"
+                       "Help & Usage\n"
+                       "To set keys:\n"
+                       "  <key> <secret> <filename>\n"
+                       "  filename is optional ^ if left blank will\n"
+                       "  default to \"" + PATH + "\"\n"
+                       "To post order:\n"
+                       "  <-p> <-u> <side> <ticker> <contracts>\n"
+                       "  -p : aka --path, set custom keypath, defval \"" 
+                       + PATH + "\"\n"
+                       "  -u : aka --url, set custom URL, defval \""
+                       + URL + "\"\n"
+                       "For help: -h or --help\n";
+
+    std::cout << msg;
 }
 
 void post(std::string key, std::string secret, std::string url)
 {
-
     std::string furl = "http://" 
                         + url 
                         + "/api/" 
@@ -89,6 +98,25 @@ void post(std::string key, std::string secret, std::string url)
                         + "/" 
                         + secret 
                         + "/endpoint";
+
+    std::string body = "{\"side\":\"{{strategy.order.action}}\",\"ticker\":\"{{ticker}}\",\"size\":\"{{strategy.order.contracts}}\",\"price\":\"{{strategy.order.price}}\",\"sent\":\"{{timenow}}\"}";
+
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+
+    curl = curl_easy_init();
+    if (curl) 
+    {
+        curl_easy_setopt(curl, CURLOPT_URL, furl.c_str());
+        //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, );
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+
+        std::cout << readBuffer << std::endl;
+    }
 
     std::cout << "Posting to : " << furl << "\n";  
 }
@@ -110,10 +138,10 @@ std::string opArg(std::string param, std::string abrv, char *argv[], int argc, s
     && (stringInArgs(abrv,argv,argc)
     || stringInArgs(param,argv,argc)))
     {
-        for (int i=0; i < argc; i++)
+        for (int i=0; i < argc - 1; i++)
         {
             if (argIs(param,argv,i)
-            || argIs(abrv,argv,i+1)) 
+            || argIs(abrv,argv,i)) 
             {
                 val = argv[i+1];
             }
@@ -134,7 +162,7 @@ int main(int argc, char **argv)
             help();
         }
 
-        else if (argIs("keyset",argv,1)) 
+        else if (argIs("setkeys",argv,1)) 
         {
             if (argc > 3)
             {   
@@ -156,7 +184,7 @@ int main(int argc, char **argv)
                                      PATH);
 
             std::string url = opArg("--url",
-                                     "-url",
+                                     "-u",
                                      argv,
                                      argc,
                                      URL);

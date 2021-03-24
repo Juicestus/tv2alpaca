@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 2.8)
+set(CURL_MIN_VERSION “7.28.0”)
+ 
+# Setting up project
+project(my_curl_app)
+ 
+#set c++ flags
+set(CMAKE_CXX_FLAGS “-g -Wall -std=c++11”)
+ 
+#set directories
+include_directories(../curlcpp/include)
+link_directories(../curlcpp/src)
+ 
+add_executable(my_curl_app
+main.cpp
+)
+ 
+#link curl and curlcpp
+target_link_libraries(my_curl_app libcurlcpp.a curl)
