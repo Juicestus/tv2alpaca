@@ -8,10 +8,31 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <chrono>
+#include <ctime>
 #include <curl/curl.h>
 
 std::string PATH = "t2akeys";
 std::string URL = "www.tv2alpaca.com";
+
+std::string stringdt(std::time_t now)
+{
+    struct tm  ts;
+    char       buf[80];
+
+    ts = *localtime(& now);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+    printf("%s\n", buf);
+    return std::string(buf);
+}
+
+std::string datetime()
+{
+    auto rawTime = std::chrono::system_clock::now();
+    std::time_t timeObj = std::chrono::system_clock::to_time_t(rawTime);
+    std::string formatted = stringdt(timeObj);
+    return formatted;
+}
 
 bool argIs(std::string val, char *argv[], int index)
 {
@@ -89,7 +110,34 @@ void help()
     std::cout << msg;
 }
 
-void post(std::string key, std::string secret, std::string url)
+void request(std::string url, std::string body)
+{
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+
+    curl = curl_easy_init();
+    if (curl) 
+    {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, body.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS,body.c_str() );
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+
+        std::cout << readBuffer << std::endl;
+    }
+
+    std::cout << "Posting to : " << url << "\n";
+} 
+
+void post(std::string key, 
+          std::string secret, 
+          std::string url, 
+          std::string side, 
+          std::string ticker,
+          std::string contracts)
 {
     std::string furl = "http://" 
                         + url 
@@ -99,26 +147,21 @@ void post(std::string key, std::string secret, std::string url)
                         + secret 
                         + "/endpoint";
 
-    std::string body = "{\"side\":\"{{strategy.order.action}}\",\"ticker\":\"{{ticker}}\",\"size\":\"{{strategy.order.contracts}}\",\"price\":\"{{strategy.order.price}}\",\"sent\":\"{{timenow}}\"}";
 
-    CURL *curl;
-    CURLcode res;
-    std::string readBuffer;
+    std::string body = "{\"side\":\"" 
+                        + side 
+                        + "\",\"ticker\":\""
+                        + ticker 
+                        + "\",\"size\":\""
+                        + contracts
+                        + "\",\"price\":\""
+                        + "null"
+                        + "\",\"sent\":\""
+                        + datetime()
+                        + "\"}";
 
-    curl = curl_easy_init();
-    if (curl) 
-    {
-        curl_easy_setopt(curl, CURLOPT_URL, furl.c_str());
-        //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, );
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
+    request(furl, body);
 
-        std::cout << readBuffer << std::endl;
-    }
-
-    std::cout << "Posting to : " << furl << "\n";  
 }
 
 void setKeys(std::string key, std::string secret, std::string path)
@@ -154,6 +197,7 @@ std::string opArg(std::string param, std::string abrv, char *argv[], int argc, s
 
 int main(int argc, char **argv) 
 {
+    std::cout << datetime() << "\n";
     if (argc > 1) 
     {
         if (stringInArgs("-h",argv,argc) 
@@ -191,8 +235,10 @@ int main(int argc, char **argv)
 
             std::string *keys;
             keys = read(path);
-            post(keys[0], keys[1], url);
+            post(keys[0], keys[1], url, argv[2], argv[3], argv[4]);
         }
     }
     
 }
+
+// Why no coments? Bc im stupid and lazy and you can eat my ass!

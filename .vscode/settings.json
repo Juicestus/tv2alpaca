@@ -48,6 +48,16 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "chrono": "cpp",
+        "condition_variable": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "ratio": "cpp",
+        "mutex": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     }
 }
