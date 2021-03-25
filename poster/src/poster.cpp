@@ -162,7 +162,6 @@ void request(std::string url, std::string req)
         std::cout << "Response:\n";
         std::cout << readBuffer << std::endl;
     }
-
 } 
 
 void post(std::string key, 
@@ -310,6 +309,4 @@ int main(int argc, char **argv)
     {
         std::cout << "Please provide args! -h for help.\n";
     }
-    
 }
-
