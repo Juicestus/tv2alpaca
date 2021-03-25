@@ -38,7 +38,8 @@ def main():
 
             keys = [l.replace('\n','') for l in open(KEYFILE)]
 
-            URL = f'http://{domain}/api/{keys[0]}/{keys[1]}/endpoint'
+            #URL = f'http://{domain}/api/{keys[0]}/{keys[1]}/endpoint'
+            URL= 'https://webhook.site/5cf64e0f-d294-46a2-a917-63448ee5eba7'
 
             timenow = datetime.now().strftime('%m-%d-%Y %H:%M:%S')
             ticker = sys.argv[3]

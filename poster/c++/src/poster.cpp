@@ -22,32 +22,22 @@ std::string PATH = "t2akeys";
 std::string URL = "www.tv2alpaca.com";
 std::string OPS[6] = {"--url","-u","--help","-h","--post","-p"};
 
-struct WriteThis 
-{
-    const char *readptr;
-    int sizeleft;
-};
-
-
 char * stringToCharArr(std::string str)
 {
     int n = str.length();
-    std::cout << n << "\n";
-    char *chararr;
+    char * chararr = NULL;
+    chararr = new char[n+1];
  
-    for (int i = 1; i < n; i++)  // seg fal 11
+    for (int i = 0; i < n; i++) 
     {
         chararr[i] = str[i];
-        std::cout << str[i];
-        std::cout << chararr[i];
     }    
-
-    std::cout << chararr;
 
     return chararr;
 }
 
-std::string stringfdto(std::time_t now, std::string format = "%m-%d-%Y %H:%M:%S")
+std::string stringfdto(std::time_t now,
+				       std::string format = "%m-%d-%Y %H:%M:%S")
 {
     struct tm ts;
     char buf[80];
@@ -146,19 +136,20 @@ void request(std::string url, std::string req)
     CURLcode res;
     std::string readBuffer;
 
-    req = "{\"hi\" : \"there\"}";
-    std::cout << req << "\n";
     char *postthis = stringToCharArr(req);
-    std::cout << *postthis << "\n";
+
+    struct curl_slist *hs=NULL;
+    hs = curl_slist_append(hs, "Content-Type: application/json");
+
+    std::cout << "Posting: \n" << postthis << "\nTo:\n" << url << "\n";
 
     curl = curl_easy_init();
     if (curl) 
     {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, hs);
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS,postthis);
-        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS,(long)strlen(postthis));
-        //curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS,postthis);
         res = curl_easy_perform(curl);
 
         if (res != CURLE_OK)
@@ -168,10 +159,10 @@ void request(std::string url, std::string req)
 
         curl_easy_cleanup(curl);
 
+        std::cout << "Response:\n";
         std::cout << readBuffer << std::endl;
     }
 
-    //std::cout << "Posting: \n" << body << "\nTo:\n" << url << "\n";
 } 
 
 void post(std::string key, 
@@ -190,7 +181,6 @@ void post(std::string key,
                         + "/" 
                         + secret 
                         + "/endpoint";
-
 
     std::string body = "{\"side\":\"" 
                         + side 
@@ -251,67 +241,74 @@ int main(int argc, char **argv)
         {
             help();
         }
-
-        else if (argIs("setkeys",argv,1)) 
+        else 
         {
-            if (argc > 3)
-            {   
-                std::string path = PATH;
-                if (argc > 4) 
-                {
-                    path = argv[4];
-                }
-                setKeys(argv[2],argv[3],path);
-            }
-        }
-
-        else if (argIs("post",argv,1)) 
-        {
-            std::string path = opArg("--path",
-                                     "-p",
-                                     argv,
-                                     argc,
-                                     PATH);
-
-            std::string url = opArg("--url",
-                                     "-u",
-                                     argv,
-                                     argc,
-                                     URL);
-
-            std::string *keys;
-            keys = read(path);
-
-            bool opInRes = false;
-
-            for (int i = 0; i < 6; i++)
+            if (argIs("setkeys",argv,1)) 
             {
-                std::string op = OPS[i];
-                
-                for (int j = 0; j < 5; j++)
-                {
-                    if (argIs(op,argv,j))
+                if (argc > 3)
+                {   
+                    std::string path = PATH;
+                    if (argc > 4) 
                     {
-                        opInRes = true;
+                        path = argv[4];
+                    }
+                    setKeys(argv[2],argv[3],path);
+                }
+            }
+
+            else if (argIs("post",argv,1)) 
+            {
+                std::string path = opArg("--path",
+                                        "-p",
+                                        argv,
+                                        argc,
+                                        PATH);
+
+                std::string url = opArg("--url",
+                                        "-u",
+                                        argv,
+                                        argc,
+                                        URL);
+
+                std::string *keys;
+                keys = read(path);
+
+                bool opInRes = false;
+
+                for (int i = 0; i < 6; i++)
+                {
+                    std::string op = OPS[i];
+                    
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (argIs(op,argv,j))
+                        {
+                            opInRes = true;
+                        }
                     }
                 }
-            }
 
-            if (!opInRes)
-            {
-                post(keys[0], 
-                 keys[1], 
-                 url, 
-                 argv[2], 
-                 argv[3], 
-                 argv[4]);
+                if (!opInRes)
+                {
+                    post(keys[0], 
+                    keys[1], 
+                    url, 
+                    argv[2], 
+                    argv[3], 
+                    argv[4]);
+                }
+                else
+                {
+                    std::cout << "Warning: Optional args must go "
+								 "after required args!\n";
+                }
+                
             }
-            else
-            {
-                std::cout << "Warning: Optional args must go after required args!\n";
-            }
-            
         }
+    }
+    else
+    {
+        std::cout << "Please provide args! -h for help.\n";
     }
     
 }

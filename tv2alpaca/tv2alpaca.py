@@ -88,9 +88,6 @@ def route(key,scrt):
     if request.method == 'POST':
 
         hook = request.json
-        
-        # DEBUG ONLY
-        print(hook)
 
         authorized = True
 
