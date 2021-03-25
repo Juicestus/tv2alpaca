@@ -16,9 +16,21 @@
 #include <string>
 #include <chrono>
 #include <ctime>
+#include <unistd.h>
+#include <pwd.h>
+#include <sys/types.h>
 #include <curl/curl.h>
 
-std::string PATH = "~/.t2akeys";
+std::string home()
+{
+    std::string homestr;
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+	homestr = homedir;
+    return homestr;
+}
+
+std::string PATH = home() + "/.t2akeys";
 std::string URL = "www.tv2alpaca.com";
 std::string OPS[6] = {"--url","-u","--help","-h","--post","-p"};
 
@@ -113,14 +125,13 @@ std::string * read(std::string path)
 void help()
 {
     std::string msg = "tv2alpaca poster - by Justus Languell\n"
-                       "\n * IN DEVELOPMENT, NOT COMPLETE *\n\n"
                        "Help & Usage\n"
                        "To set keys:\n"
-                       "  <key> <secret> <filename>\n"
+                       "  setkeys <key> <secret> <filename>\n"
                        "  filename is optional ^ if left blank will\n"
                        "  default to \"" + PATH + "\"\n"
                        "To post order:\n"
-                       "  <-p> <-u> <side> <ticker> <contracts>\n"
+                       "  post <side> <ticker> <contracts> <-p> <-u> \n"
                        "  -p : aka --path, set custom keypath, defval \"" 
                        + PATH + "\"\n"
                        "  -u : aka --url, set custom URL, defval \""
@@ -143,6 +154,8 @@ void request(std::string url, std::string req)
 
     std::cout << "Posting: \n" << postthis << "\nTo:\n" << url << "\n";
 
+    std::cout << "Response:\n";
+
     curl = curl_easy_init();
     if (curl) 
     {
@@ -159,8 +172,7 @@ void request(std::string url, std::string req)
 
         curl_easy_cleanup(curl);
 
-        std::cout << "Response:\n";
-        std::cout << readBuffer << std::endl;
+        std::cout << readBuffer << "\n";
     }
 } 
 
