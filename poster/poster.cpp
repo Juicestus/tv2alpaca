@@ -22,6 +22,30 @@ std::string PATH = "t2akeys";
 std::string URL = "www.tv2alpaca.com";
 std::string OPS[6] = {"--url","-u","--help","-h","--post","-p"};
 
+struct WriteThis 
+{
+    const char *readptr;
+    int sizeleft;
+};
+
+
+char * stringToCharArr(std::string str)
+{
+    int n = str.length();
+    std::cout << n << "\n";
+    char *chararr;
+ 
+    for (int i = 1; i < n; i++)  // seg fal 11
+    {
+        chararr[i] = str[i];
+        std::cout << str[i];
+        std::cout << chararr[i];
+    }    
+
+    std::cout << chararr;
+
+    return chararr;
+}
 
 std::string stringfdto(std::time_t now, std::string format = "%m-%d-%Y %H:%M:%S")
 {
@@ -29,7 +53,6 @@ std::string stringfdto(std::time_t now, std::string format = "%m-%d-%Y %H:%M:%S"
     char buf[80];
     ts = *localtime(& now);
     strftime(buf, sizeof(buf), format.c_str(), &ts);
-    printf("%s\n", buf);
     return std::string(buf);
 }
 
@@ -117,26 +140,38 @@ void help()
     std::cout << msg;
 }
 
-void request(std::string url, std::string body)
+void request(std::string url, std::string req)
 {
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
 
+    req = "{\"hi\" : \"there\"}";
+    std::cout << req << "\n";
+    char *postthis = stringToCharArr(req);
+    std::cout << *postthis << "\n";
+
     curl = curl_easy_init();
     if (curl) 
     {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, body.c_str());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS,body.c_str() );
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS,postthis);
+        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS,(long)strlen(postthis));
+        //curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         res = curl_easy_perform(curl);
+
+        if (res != CURLE_OK)
+        {
+            std::cout << "Warning: Curl failed!";
+        }
+
         curl_easy_cleanup(curl);
 
         std::cout << readBuffer << std::endl;
     }
 
-    std::cout << "Posting: \n" << body << "\nTo:\n" << url << "\n";
+    //std::cout << "Posting: \n" << body << "\nTo:\n" << url << "\n";
 } 
 
 void post(std::string key, 
