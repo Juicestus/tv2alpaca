@@ -184,3 +184,19 @@
 03/25/2021 @ 16:17:00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|a|: Order: BUY AAPL x 200
 03/25/2021 @ 16:17:00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|a|: [ERROR] Key and secret not valid!
 
+03/26/2021 @ 08:34:24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—— ORDER ———————————————————————————————————————————————————————————
+03/26/2021 @ 08:34:24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: [ACCEPTED]
+03/26/2021 @ 08:34:24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: [AUTHORIZED]
+03/26/2021 @ 08:34:24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: Order: BUY AAPL x 200
+03/26/2021 @ 08:34:25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: ALREADY OWNED: 0 shares
+03/26/2021 @ 08:34:25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: REQUESTED SIZE: 200 shares
+03/26/2021 @ 08:34:25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: [SUCCESS] Unclear Success!?
+
+03/26/2021 @ 08:36:37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—— ORDER ———————————————————————————————————————————————————————————
+03/26/2021 @ 08:36:37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: [ACCEPTED]
+03/26/2021 @ 08:36:37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: [AUTHORIZED]
+03/26/2021 @ 08:36:37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: Order: BUY AAPL x 200
+03/26/2021 @ 08:36:38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: ALREADY OWNED: 0 shares
+03/26/2021 @ 08:36:38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: REQUESTED SIZE: 200 shares
+03/26/2021 @ 08:36:38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|PKN6AVBGAUMJDG9VL0JG|: [SUCCESS] Unclear Success!?
+

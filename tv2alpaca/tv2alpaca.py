@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 
+#      __       ___         __                      
+#     / /__   _|__ \ ____ _/ /___  ____ __________ _
+#    / __/ | / /_/ // __ `/ / __ \/ __ `/ ___/ __ `/
+#   / /_ | |/ / __// /_/ / / /_/ / /_/ / /__/ /_/ / 
+#   \__/ |___/____/\__,_/_/ .___/\__,_/\___/\__,_/  
+#                        /_/
+
 # Written by Justus Languell <jus@gtsbr.org>, 2021
+
+# tv2alpaca.py - main server application
+
 
 import alpaca 
 
